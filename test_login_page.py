@@ -15,10 +15,12 @@ class TestSmoke():
         # print("\nClosing browser...")
         self.browser.quit()
 
+    @pytest.mark.smoke
     def test_smoke_page_opens(self):
         self.browser.get(link)
         assert self.browser.title in "Swag Labs", "Incorrect page title/Page is not opened"
 
+    @pytest.mark.smoke
     def test_smoke_login(self):
         self.browser.get(link)
         self.browser.find_element(By.CSS_SELECTOR, "#user-name").send_keys("standard_user")
@@ -36,7 +38,7 @@ class TestCriticalPath():
     def teardown_method(self):
         # print("\nClosing browser...")
         self.browser.quit()
-
+    @pytest.mark.criticalpath
     def test_locked_user_login(self):
         self.browser.get(link)
         self.browser.find_element(By.CSS_SELECTOR, "#user-name").send_keys("locked_out_user")
@@ -47,6 +49,7 @@ class TestCriticalPath():
         assert self.browser.find_element(By.CSS_SELECTOR, ".error-button").text in \
                "Epic sadface: Sorry, this user has been locked out.", "Locked User error message is incorrect"
 
+    @pytest.mark.criticalpath
     def test_problem_user_login(self):
         self.browser.get(link)
         self.browser.find_element(By.CSS_SELECTOR, "#user-name").send_keys("problem_user")
@@ -54,6 +57,7 @@ class TestCriticalPath():
         self.browser.find_element(By.CSS_SELECTOR, "#login-button").click()
         assert self.browser.find_element(By.CSS_SELECTOR, "#react-burger-menu-btn"), "Problem_User login failed"
 
+    @pytest.mark.criticalpath
     def test_performance_glitch_user_login(self):
         self.browser.get(link)
         self.browser.find_element(By.CSS_SELECTOR, "#user-name").send_keys("performance_glitch_user")
@@ -62,11 +66,13 @@ class TestCriticalPath():
         assert self.browser.find_element(By.CSS_SELECTOR, "#react-burger-menu-btn"), \
             "Performance_glitch_user login failed"
 
+    @pytest.mark.criticalpath
     def test_username_placeholder(self):
         self.browser.get(link)
         assert self.browser.find_element(By.CSS_SELECTOR, "#user-name").get_attribute("placeholder") \
                in "Username", "Incorrect Username field placeholder"
 
+    @pytest.mark.criticalpath
     def test_password_placeholder(self):
         self.browser.get(link)
         assert self.browser.find_element(By.CSS_SELECTOR, "#password").get_attribute("placeholder") \
@@ -82,7 +88,7 @@ class TestNegativeScenarios():
     def teardown_method(self):
         # print("\nClosing browser...")
         self.browser.quit()
-
+    @pytest.mark.negative
     def test_no_username_input(self):
         self.browser.get(link)
         self.browser.find_element(By.CSS_SELECTOR, "#password").send_keys("secret_sauce")
@@ -92,6 +98,7 @@ class TestNegativeScenarios():
         assert self.browser.find_element(By.CSS_SELECTOR, "[data-test='error']").text in \
                "Epic sadface: Username is required", "'No username input' error message is incorrect"
 
+    @pytest.mark.negative
     def test_no_password_input(self):
         self.browser.get(link)
         self.browser.find_element(By.CSS_SELECTOR, "#user-name").send_keys("standard_user")
@@ -101,6 +108,7 @@ class TestNegativeScenarios():
         assert self.browser.find_element(By.CSS_SELECTOR, "[data-test='error']").text in \
                "Epic sadface: Password is required", "'No username input' error message is incorrect"
 
+    @pytest.mark.negative
     def test_incorrect_username(self):
         self.browser.get(link)
         self.browser.find_element(By.CSS_SELECTOR, "#user-name").send_keys("user")
@@ -112,6 +120,7 @@ class TestNegativeScenarios():
                "Epic sadface: Username and password do not match any user in this service", \
             "'Incorrect username/password input' error message is incorrect"
 
+    @pytest.mark.negative
     def test_incorrect_password(self):
         self.browser.get(link)
         self.browser.find_element(By.CSS_SELECTOR, "#user-name").send_keys("standard_user")
@@ -122,4 +131,3 @@ class TestNegativeScenarios():
         assert self.browser.find_element(By.CSS_SELECTOR, "[data-test='error']").text in \
                "Epic sadface: Username and password do not match any user in this service", \
             "'Incorrect username/password input' error message is incorrect"
-
